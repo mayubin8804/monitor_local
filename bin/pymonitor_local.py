@@ -71,7 +71,12 @@ def parseArgs():
             "   0   Submit new jobs parallel with the old jobs.\n" +
             "   1   Submit new jobs depend on the old jobs."
         )
-        
+    
+    # the subcommand: cron
+    parser_3 = subparsers.add_parser(
+        'cron', usage = '%(prog)s [options]',
+        formatter_class = argparse.RawTextHelpFormatter,
+        help = 'Do cron job.')
     
     if len(sys.argv) < 2:
         parser.print_help()
