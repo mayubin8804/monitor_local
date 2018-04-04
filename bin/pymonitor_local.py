@@ -12,9 +12,14 @@ import os
 import sys
 import argparse
 import re
+import logging
 sys.path.append(os.path.join(os.path.dirname(os.path.realpath(__file__)), '..', 'lib', 'python2.7', 'site-packages'))
 import myConfigFile
 import myProjectDB
+
+logCfg = os.path.join(os.path.dirname(os.path.realpath(__file__)), '..', 'conf', 'logging.conf')
+logging.config.fileConfig(logCfg)
+logger = logging.getLogger('main')
 
 def parseArgs():
     '''Parse the arguments from command line'''
