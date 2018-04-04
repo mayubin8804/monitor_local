@@ -13,6 +13,7 @@ import sys
 import argparse
 import re
 import logging
+import logging.handlers
 sys.path.append(os.path.join(os.path.dirname(os.path.realpath(__file__)), '..', 'lib', 'python2.7', 'site-packages'))
 import myConfigFile
 import myProjectDB
@@ -29,7 +30,7 @@ logDir = os.path.join(os.path.dirname(os.path.realpath(__file__)), '..', 'log')
 if not os.path.isdir(logDir):
     os.makedirs(logDir)
 logFile = os.path.join(logDir, 'monitor_local.log')
-fh = logging.FileHandler(logFile)
+fh = logging.handlers.RotatingFileHandler(logFile, mode='a', maxBytes=10000000, backupCount=5)
 fh.setLevel(logging.DEBUG)
 fh.setFormatter(formatter)
 # create console handler
@@ -127,22 +128,29 @@ def setdefault(argsObj, cfgObj):
         cfgObj.setDefEmail(argsObj.opt_e)
 
 def importProject(argsObj, cfgObj):
-    logger_main.info("Creating database. This might take a while...")
-    
     prjDBDir = os.path.join(os.path.dirname(os.path.realpath(__file__)), '..', 'projectDB')
     if not os.path.isdir(prjDBDir):
         os.makedirs(prjDBDir)
     
-    projectName = argsObj.opt_p
-    projectDB   = cfgObj.getPrjDB(projectName)
+    taskListFile = argsObj.opt_i
+    projectName  = argsObj.opt_p
+    projectDB    = cfgObj.getPrjDB(projectName)
     if projectDB == '':
         projectDB = os.path.join(prjDBDir, projectName + '.db')
+        logger_main.info("New project. Project Name: %s, Project db: %s", projectName, projectDB)
+        logger_main.info("Add project to global config file")
         cfgObj.addProject(projectName, projectDB)
+    else:
+        logger_main.info("Existing project. Project Name: %s, Project db: %s", projectName, projectDB)
+    logger_main.info("Open project db: %s", projectDB)
     myProjectDBObj = myProjectDB.MyProjectDB(projectName, projectDB)
     if argsObj.subcommand == 'qsubsge':
-        myProjectDBObj.importQsubsge(argsObj.opt_i, argsObj.opt_m, argsObj.opt_L)
+        logger_main.info("Importing tasks of qsubsge format into project db: %s", taskListFile)
+        myProjectDBObj.importQsubsge(taskListFile, argsObj.opt_m, argsObj.opt_L)
     else:
-        myProjectDBObj.importPymonitor(argsObj.opt_i)
+        logger_main.info("Importing tasks of pymonitor format into project db: %s", taskListFile)
+        myProjectDBObj.importPymonitor(taskListFile)
+    logger_main.info("Finish importing tasks. Close project db")
 
 if __name__ == '__main__':
     args = parseArgs()
