@@ -17,9 +17,30 @@ sys.path.append(os.path.join(os.path.dirname(os.path.realpath(__file__)), '..', 
 import myConfigFile
 import myProjectDB
 
-logCfg = os.path.join(os.path.dirname(os.path.realpath(__file__)), '..', 'conf', 'logging.conf')
-logging.config.fileConfig(logCfg)
-logger = logging.getLogger('main')
+# create logger
+logger_main = logging.getLogger('monitor_local')
+logger_main.setLevel(logging.DEBUG)
+logger_ZODB = logging.getLogger('ZODB')
+logger_ZODB.setLevel(logging.DEBUG)
+# create formatter
+formatter = logging.Formatter('%(asctime)s %(name)s-%(levelname)s: %(message)s', datefmt='[%Y-%m-%d %H:%M:%S]')
+# create file handler
+logDir = os.path.join(os.path.dirname(os.path.realpath(__file__)), '..', 'log')
+if not os.path.isdir(logDir):
+    os.makedirs(logDir)
+logFile = os.path.join(logDir, 'monitor_local.log')
+fh = logging.FileHandler(logFile)
+fh.setLevel(logging.DEBUG)
+fh.setFormatter(formatter)
+# create console handler
+ch = logging.StreamHandler()
+ch.setLevel(logging.DEBUG)
+ch.setFormatter(formatter)
+# add the handlers to the logger
+logger_main.addHandler(fh)
+logger_main.addHandler(ch)
+logger_ZODB.addHandler(fh)
+logger_ZODB.addHandler(ch)
 
 def parseArgs():
     '''Parse the arguments from command line'''
@@ -106,7 +127,7 @@ def setdefault(argsObj, cfgObj):
         cfgObj.setDefEmail(argsObj.opt_e)
 
 def importProject(argsObj, cfgObj):
-    print "Creating database. This might take a while..."
+    logger_main.info("Creating database. This might take a while...")
     
     prjDBDir = os.path.join(os.path.dirname(os.path.realpath(__file__)), '..', 'projectDB')
     if not os.path.isdir(prjDBDir):
