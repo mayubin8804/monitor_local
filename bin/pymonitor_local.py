@@ -14,6 +14,7 @@ import argparse
 import re
 sys.path.append(os.path.join(os.path.dirname(os.path.realpath(__file__)), '..', 'lib', 'python2.7', 'site-packages'))
 import myConfigFile
+import myProjectDB
 
 def parseArgs():
     '''Parse the arguments from command line'''
@@ -72,8 +73,18 @@ def parseArgs():
             "   1   Submit new jobs depend on the old jobs."
         )
     
-    # the subcommand: cron
+    # the subcommand: taskmonitor
     parser_3 = subparsers.add_parser(
+        'taskmonitor', usage = '%(prog)s -i <File> -p <STR> [options]',
+        formatter_class = argparse.RawTextHelpFormatter,
+        help = 'Add a task_monitor.py format task list.'
+        )
+    parser_3.add_argument('-i', required = True, metavar = '<FILE>', dest = "opt_i", help = 'input config.txt file, required.')
+    parser_3.add_argument('-p', required = True, metavar = '<STR>', dest = "opt_p", help = 'project name for monitor, required.')
+    parser_3.add_argument('-n', type = int, metavar = '<INT>', dest = "opt_n", help = 'maximum number of jobs.')
+    
+    # the subcommand: cron
+    parser_4 = subparsers.add_parser(
         'cron', usage = '%(prog)s [options]',
         formatter_class = argparse.RawTextHelpFormatter,
         help = 'Do cron job.')
@@ -91,12 +102,21 @@ def setdefault(argsObj, cfgObj):
 
 def importProject(argsObj, cfgObj):
     print "Creating database. This might take a while..."
+    
+    prjDBDir = os.path.join(os.path.dirname(os.path.realpath(__file__)), '..', 'projectDB')
+    if not os.path.isdir(prjDBDir):
+        os.makedirs(prjDBDir)
+    
     projectName = argsObj.opt_p
     projectDB   = cfgObj.getPrjDB(projectName)
     if projectDB == '':
-        projectDB = os.path.join(os.path.dirname(os.path.realpath(__file__)), 'projectDB', projectName + '.db')
+        projectDB = os.path.join(prjDBDir, projectName + '.db')
         cfgObj.addProject(projectName, projectDB)
-    
+    myProjectDBObj = myProjectDB.MyProjectDB(projectName, projectDB)
+    if argsObj.subcommand == 'qsubsge':
+        myProjectDBObj.importQsubsge(argsObj.opt_i, argsObj.opt_m, argsObj.opt_L)
+    else:
+        myProjectDBObj.importPymonitor(argsObj.opt_i)
 
 if __name__ == '__main__':
     args = parseArgs()
@@ -107,5 +127,7 @@ if __name__ == '__main__':
     command = args.subcommand
     if command == 'setdefault':
         setdefault(args, cfgFileObj)
-    elif command == 'qsubsge':
+    elif command == 'qsubsge' or command == 'taskmonitor':
+        importProject(args, cfgFileObj)
+    elif command == 'cron':
         pass
