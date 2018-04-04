@@ -142,15 +142,12 @@ def importProject(argsObj, cfgObj):
         cfgObj.addProject(projectName, projectDB)
     else:
         logger_main.info("Existing project. Project Name: %s, Project db: %s", projectName, projectDB)
-    logger_main.info("Open project db: %s", projectDB)
+    
     myProjectDBObj = myProjectDB.MyProjectDB(projectName, projectDB)
     if argsObj.subcommand == 'qsubsge':
-        logger_main.info("Importing tasks of qsubsge format into project db: %s", taskListFile)
         myProjectDBObj.importQsubsge(taskListFile, argsObj.opt_m, argsObj.opt_L)
     else:
-        logger_main.info("Importing tasks of pymonitor format into project db: %s", taskListFile)
         myProjectDBObj.importPymonitor(taskListFile)
-    logger_main.info("Finish importing tasks. Close project db")
 
 if __name__ == '__main__':
     args = parseArgs()
