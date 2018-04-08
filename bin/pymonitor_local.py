@@ -134,14 +134,14 @@ def importProject(argsObj, cfgObj):
     
     taskListFile = argsObj.opt_i
     projectName  = argsObj.opt_p
-    projectDB    = cfgObj.getPrjDB(projectName)
-    if projectDB == '':
-        projectDB = os.path.join(prjDBDir, projectName + '.db')
-        logger_main.info("New project. Project Name: %s, Project db: %s", projectName, projectDB)
-        logger_main.info("Add project to global config file")
-        cfgObj.addProject(projectName, projectDB)
+    projectDB    = ''
+    if cfgObj.hasProject(projectName):
+        logger_main.info("Existing project: %s", projectName)
+        projectDB = cfgObj.getPrjDB(projectName)
     else:
-        logger_main.info("Existing project. Project Name: %s, Project db: %s", projectName, projectDB)
+        logger_main.info("New project: %s", projectName)
+        projectDB = os.path.join(prjDBDir, projectName + '.db')
+        cfgObj.addProject(projectName, projectDB)
     
     myProjectDBObj = myProjectDB.MyProjectDB(projectName, projectDB)
     if argsObj.subcommand == 'qsubsge':
