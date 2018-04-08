@@ -159,7 +159,7 @@ def importProject(argsObj, cfgObj, cronObj_1):
         projectDB = cfgObj.getPrjDB(projectName)
     else:
         logger_main.info("New project: %s", projectName)
-        projectDB = os.path.join(prjDBDir, projectName + '.db')
+        projectDB = os.path.join(prjDBDir, projectName + '.fs')
         cfgObj.addProject(projectName, projectDB)
     
     myProjectDBObj = myProjectDB.MyProjectDB(projectName, projectDB)
