@@ -163,6 +163,7 @@ def importProject(argsObj, cfgObj, cronObj_1):
         cfgObj.addProject(projectName, projectDB)
     
     myProjectDBObj = myProjectDB.MyProjectDB(projectName, projectDB)
+    myProjectDBObj.setMaxJobNum(argsObj.opt_n)
     if argsObj.subcommand == 'qsubsge':
         myProjectDBObj.importQsubsge(taskListFile, argsObj.opt_m, argsObj.opt_L)
     else:
