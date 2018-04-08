@@ -24,6 +24,8 @@ logger_main = logging.getLogger('monitor_local')
 logger_main.setLevel(logging.DEBUG)
 logger_ZODB = logging.getLogger('ZODB')
 logger_ZODB.setLevel(logging.DEBUG)
+logger_zc = logging.getLogger('zc')
+logger_zc.setLevel(logging.DEBUG)
 # create formatter
 formatter = logging.Formatter('%(asctime)s %(name)s-%(levelname)s: %(message)s', datefmt='[%Y-%m-%d %H:%M:%S]')
 # create file handler
@@ -43,6 +45,8 @@ logger_main.addHandler(fh)
 logger_main.addHandler(ch)
 logger_ZODB.addHandler(fh)
 logger_ZODB.addHandler(ch)
+logger_zc.addHandler(fh)
+logger_zc.addHandler(ch)
 
 def parseArgs():
     '''Parse the arguments from command line'''
