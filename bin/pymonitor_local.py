@@ -118,7 +118,7 @@ def parseArgs():
         help='Do cron job.')
     parser_4.add_argument(
         '-m', type=int, choices=[0, 1, 2, 3, 4], default=0, metavar='<INT>', dest="opt_m",
-        help="Operation mode. [%(default)d]\n" +
+        help="Operation mode. In most cases, you don't need to use this command manually. [%(default)d]\n" +
             "   0   Do nothing.\n" +
             "   1   Check job status.\n" +
             "   2   Database maintance.\n" +
