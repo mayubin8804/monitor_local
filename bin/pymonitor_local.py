@@ -82,8 +82,8 @@ def parseArgs():
         help='Set default value.'
         )
     parser_1.add_argument('-e', type=emailAddr, metavar='<Email>', dest="opt_e", help='set defualt email address.')
-
-
+    parser_1.add_argument('-n', type=int, metavar='<INT>', dest="opt_n", help='Monitor running interval (minutes).')
+    
     # the subcommand: qsubsge
     parser_2 = subparsers.add_parser(
         'qsubsge', usage='%(prog)s -i <File> -p <STR> [options]',
@@ -95,27 +95,36 @@ def parseArgs():
     parser_2.add_argument('-L', type=int, default=1, metavar='<INT>', dest="opt_L", help='number of lines for each job. [%(default)d]')
     parser_2.add_argument('-n', type=int, default=10, metavar='<INT>', dest="opt_n", help='maximum number of jobs. [%(default)d]')
     parser_2.add_argument(
-        '-m', type = int, choices = [0, 1], default = 0, metavar = '<INT>', dest = "opt_m",
-        help = "Operation mode for submitting in the same project. [%(default)d]\n" +
+        '-m', type=int, choices=[0, 1], default=0, metavar='<INT>', dest="opt_m",
+        help="Operation mode for submitting in the same project. [%(default)d]\n" +
             "   0   Submit new jobs parallel with the old jobs.\n" +
             "   1   Submit new jobs depend on the old jobs."
         )
     
     # the subcommand: taskmonitor
     parser_3 = subparsers.add_parser(
-        'taskmonitor', usage = '%(prog)s -i <File> -p <STR> [options]',
-        formatter_class = argparse.RawTextHelpFormatter,
-        help = 'Add a task_monitor.py format task list.'
+        'taskmonitor', usage='%(prog)s -i <File> -p <STR> [options]',
+        formatter_class=argparse.RawTextHelpFormatter,
+        help='Add a task_monitor.py format task list.'
         )
-    parser_3.add_argument('-i', required = True, metavar = '<FILE>', dest = "opt_i", help = 'input config.txt file, required.')
-    parser_3.add_argument('-p', required = True, metavar = '<STR>', dest = "opt_p", help = 'project name for monitor, required.')
-    parser_3.add_argument('-n', type = int, metavar = '<INT>', dest = "opt_n", help = 'maximum number of jobs.')
+    parser_3.add_argument('-i', required=True, metavar='<FILE>', dest="opt_i", help='input config.txt file, required.')
+    parser_3.add_argument('-p', required=True, metavar='<STR>', dest="opt_p", help='project name for monitor, required.')
+    parser_3.add_argument('-n', type=int, metavar='<INT>', dest="opt_n", help='maximum number of jobs.')
     
     # the subcommand: cron
     parser_4 = subparsers.add_parser(
-        'cron', usage = '%(prog)s [options]',
-        formatter_class = argparse.RawTextHelpFormatter,
-        help = 'Do cron job.')
+        'cron', usage='%(prog)s [options]',
+        formatter_class=argparse.RawTextHelpFormatter,
+        help='Do cron job.')
+    parser_4.add_argument(
+        '-m', type=int, choices=[0, 1, 2, 3, 4], default=0, metavar='<INT>', dest="opt_m",
+        help="Operation mode. [%(default)d]\n" +
+            "   0   Do nothing.\n" +
+            "   1   Check job status.\n" +
+            "   2   Database maintance.\n" +
+            "   3   Add crontab.\n" +
+            "   4   Delete crontab."
+        )
     
     if len(sys.argv) < 2:
         parser.print_help()
@@ -124,11 +133,16 @@ def parseArgs():
     args = parser.parse_args()
     return args
 
-def setdefault(argsObj, cfgObj):
+def setdefault(argsObj, cfgObj, cronObj_1):
     if argsObj.opt_e:
         cfgObj.setDefEmail(argsObj.opt_e)
+    if argsObj.opt_n:
+        cfgObj.setChkInterval(argsObj.opt_n)
+        if cronObj_1.hasCronJob():
+            cronObj_1.removeCronJob()
+            cronObj_1.addCronByMinInterval(argsObj.opt_n)
 
-def importProject(argsObj, cfgObj):
+def importProject(argsObj, cfgObj, cronObj_1):
     prjDBDir = os.path.join(os.path.dirname(os.path.realpath(__file__)), '..', 'projectDB')
     if not os.path.isdir(prjDBDir):
         os.makedirs(prjDBDir)
@@ -149,6 +163,24 @@ def importProject(argsObj, cfgObj):
         myProjectDBObj.importQsubsge(taskListFile, argsObj.opt_m, argsObj.opt_L)
     else:
         myProjectDBObj.importPymonitor(taskListFile)
+    
+    if not cronObj_1.hasCronJob():
+        cronObj_1.addCronByMinInterval(cfgObj.getChkInterval())
+
+def cronJob(argsObj, cfgObj, cronObj_1):
+    cronMode = argsObj.opt_m
+    if cronMode == 0:
+        pass
+    elif cronMode == 1:
+        pass
+    elif cronMode == 2:
+        pass
+    elif cronMode == 3:
+        if not cronObj_1.hasCronJob():
+            cronObj_1.addCronByMinInterval(cfgObj.getChkInterval())
+    elif cronMode == 4:
+        if cronObj_1.hasCronJob():
+            cronObj_1.removeCronJob()
 
 if __name__ == '__main__':
     args = parseArgs()
@@ -156,10 +188,12 @@ if __name__ == '__main__':
     cfgDir = os.path.join(os.path.dirname(os.path.realpath(__file__)), '..', 'conf')
     cfgFileObj = myConfigFile.MyCfgFile(cfgDir)
     
+    myCronObj_1 = myCron.MyCron("python %s cron -m 1" % os.path.realpath(__file__))
+    
     command = args.subcommand
     if command == 'setdefault':
-        setdefault(args, cfgFileObj)
+        setdefault(args, cfgFileObj, myCronObj_1)
     elif command == 'qsubsge' or command == 'taskmonitor':
-        importProject(args, cfgFileObj)
+        importProject(args, cfgFileObj, myCronObj_1)
     elif command == 'cron':
-        pass
+        cronJob(args, cfgFileObj, myCronObj_1)
