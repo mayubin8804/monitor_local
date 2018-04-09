@@ -168,6 +168,7 @@ def importProject(argsObj, cfgObj, cronObj_1):
         myProjectDBObj.importQsubsge(taskListFile, argsObj.opt_m, argsObj.opt_L)
     else:
         myProjectDBObj.importPymonitor(taskListFile)
+    myProjectDBObj.close()
     
     if not cronObj_1.hasCronJob():
         cronObj_1.addCronByMinInterval(cfgObj.getChkInterval())
