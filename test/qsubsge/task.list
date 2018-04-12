@@ -1,18 +1,36 @@
+echo start task 1 at `date '+%Y-%m-%d %H:%M:%S'`
 sleep 10
 echo 'test1: sleep 10 sec'
+echo finish task 1 at `date '+%Y-%m-%d %H:%M:%S'`
+echo start task 2 at `date '+%Y-%m-%d %H:%M:%S'`
 sleep 5
 echo 'test2: sleep 5 sec'
+echo finish task 2 at `date '+%Y-%m-%d %H:%M:%S'`
+echo start task 3 at `date '+%Y-%m-%d %H:%M:%S'`
 sleep 7
 echo 'test3: sleep 7 sec'
+echo finish task 3 at `date '+%Y-%m-%d %H:%M:%S'`
+echo start task 4 at `date '+%Y-%m-%d %H:%M:%S'`
 sleep 10
 echo 'test4: sleep 10 sec'
+echo finish task 4 at `date '+%Y-%m-%d %H:%M:%S'`
+echo start task 5 at `date '+%Y-%m-%d %H:%M:%S'`
 sleep 5
 echo 'test5: sleep 5 sec'
+echo finish task 5 at `date '+%Y-%m-%d %H:%M:%S'`
+echo start task 6 at `date '+%Y-%m-%d %H:%M:%S'`
 sleep 7
 echo 'test6: sleep 7 sec'
+echo finish task 6 at `date '+%Y-%m-%d %H:%M:%S'`
+echo start task 7 at `date '+%Y-%m-%d %H:%M:%S'`
 sleep 10
 echo 'test7: sleep 10 sec'
+echo finish task 7 at `date '+%Y-%m-%d %H:%M:%S'`
+echo start at task 8 `date '+%Y-%m-%d %H:%M:%S'`
 sleep 5
 echo 'test8: sleep 5 sec'
+echo finish task 8 at `date '+%Y-%m-%d %H:%M:%S'`
+echo start at task 9 `date '+%Y-%m-%d %H:%M:%S'`
 sleep 7
 echo 'test9: sleep 7 sec'
+echo finish task 9 at `date '+%Y-%m-%d %H:%M:%S'`

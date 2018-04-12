@@ -12,6 +12,7 @@ import os
 import sys
 import argparse
 import re
+import time
 import logging
 import logging.handlers
 sys.path.append(os.path.join(os.path.dirname(os.path.realpath(__file__)), '..', 'lib', 'python2.7', 'site-packages'))
@@ -151,18 +152,24 @@ def importProject(argsObj, cfgObj, cronObj_1):
     if not os.path.isdir(prjDBDir):
         os.makedirs(prjDBDir)
     
-    taskListFile = argsObj.opt_i
+    taskListFile = os.path.abspath(argsObj.opt_i)
     projectName  = argsObj.opt_p
     projectDB    = ''
     if cfgObj.hasProject(projectName):
-        logger_main.info("Existing project: %s", projectName)
+        logger_main.info("Existing project: %s, updating the database, this might take a while...", projectName)
         projectDB = cfgObj.getPrjDB(projectName)
     else:
-        logger_main.info("New project: %s", projectName)
+        logger_main.info("New project: %s, creating the database, this might take a while...", projectName)
         projectDB = os.path.join(prjDBDir, projectName + '.fs')
         cfgObj.addProject(projectName, projectDB)
-    
-    myProjectDBObj = myProjectDB.MyProjectDB(projectName, projectDB)
+    while True:
+        try:
+            myProjectDBObj = myProjectDB.MyProjectDB(projectName, projectDB)
+        except myProjectDB.DBisBusyError:
+            logger_main.info("The database is busy, waiting for 5 sec...")
+            time.sleep(5)
+        else:
+            break
     myProjectDBObj.setMaxJobNum(argsObj.opt_n)
     if argsObj.subcommand == 'qsubsge':
         myProjectDBObj.importQsubsge(taskListFile, argsObj.opt_m, argsObj.opt_L)
@@ -178,7 +185,16 @@ def cronJob(argsObj, cfgObj, cronObj_1):
     if cronMode == 0:
         pass
     elif cronMode == 1:
-        pass
+        for prjName in cfgObj.getPrjList():
+            prjDB = cfgObj.getPrjDB(prjName)
+            try:
+                myPrjDBObj = myProjectDB.MyProjectDB(prjName, prjDB)
+            except myProjectDB.DBisBusyError:
+                logger_main.info("The database is busy, it will be try in next cron time")
+                continue
+            myPrjDBObj.updateDB()
+            myPrjDBObj.runReadyJob()
+            myPrjDBObj.close()
     elif cronMode == 2:
         pass
     elif cronMode == 3:

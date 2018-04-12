@@ -1,0 +1,8 @@
+/data/pipeline/monitor_local/test/pymonitor/task_2/task_1.sh    /data/pipeline/monitor_local/test/pymonitor/task_2/task_3.sh
+/data/pipeline/monitor_local/test/pymonitor/task_2/task_1.sh    /data/pipeline/monitor_local/test/pymonitor/task_2/task_4.sh
+/data/pipeline/monitor_local/test/pymonitor/task_2/task_1.sh    /data/pipeline/monitor_local/test/pymonitor/task_2/task_5.sh
+/data/pipeline/monitor_local/test/pymonitor/task_2/task_1.sh    /data/pipeline/monitor_local/test/pymonitor/task_2/task_6.sh
+/data/pipeline/monitor_local/test/pymonitor/task_2/task_2.sh    /data/pipeline/monitor_local/test/pymonitor/task_2/task_3.sh
+/data/pipeline/monitor_local/test/pymonitor/task_2/task_2.sh    /data/pipeline/monitor_local/test/pymonitor/task_2/task_4.sh
+/data/pipeline/monitor_local/test/pymonitor/task_2/task_2.sh    /data/pipeline/monitor_local/test/pymonitor/task_2/task_5.sh
+/data/pipeline/monitor_local/test/pymonitor/task_2/task_2.sh    /data/pipeline/monitor_local/test/pymonitor/task_2/task_6.sh
