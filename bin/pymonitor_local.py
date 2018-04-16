@@ -86,7 +86,7 @@ def parseArgs():
         formatter_class=argparse.RawTextHelpFormatter,
         help='Set default value.'
         )
-    parser_1.add_argument('-e', type=emailAddr, metavar='<Email>', dest="opt_e", help='set defualt email address.')
+#    parser_1.add_argument('-e', type=emailAddr, metavar='<Email>', dest="opt_e", help='set defualt email address.')
     parser_1.add_argument('-n', type=int, metavar='<INT>', dest="opt_n", help='Monitor running interval (minutes).')
     
     # the subcommand: qsubsge
@@ -139,8 +139,8 @@ def parseArgs():
     return args
 
 def setdefault(argsObj, cfgObj, cronObj_1):
-    if argsObj.opt_e:
-        cfgObj.setDefEmail(argsObj.opt_e)
+    #if argsObj.opt_e:
+    #    cfgObj.setDefEmail(argsObj.opt_e)
     if argsObj.opt_n:
         cfgObj.setChkInterval(argsObj.opt_n)
         if cronObj_1.hasCronJob():
