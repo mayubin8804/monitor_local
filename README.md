@@ -1,2 +1,2 @@
 # monitor_local
-monitor_local is a software that can execute and monitor the tasks on Linux system.
+Monitor_Local is a software that can executes and monitors multiple tasks on Linux system. The scripts can be executed in specified order based on your config file.
