@@ -13,7 +13,7 @@ In monitor_local, a task means a shell scripts, you can specify the execution or
 **Note**: The path of the shell scripts must be absolute path.
 
 ### *Format 1*
-In the tasks list file of this format, one or more lines represent one task, you can specify the line number of one task, the list file will be split into several shell scripts. E.g:.
+In this format, one or more lines represent one task, you can specify the line number of one task, the list file will be split into several shell scripts. E.g:.
 ```
 echo start task 1 at `date`
 /path/to/task1.sh
@@ -37,7 +37,7 @@ echo finish task 2 at `date`
 ```
 
 ### *Format 2*
-In the tasks list file of this format, you can put two tasks separated  by space or Tab in one line, the second task will be executed after the first task is finished. E.g.:
+In this format, you can put two tasks separated  by space or Tab in one line, the second task will be executed after the first task is finished. E.g.:
 ```
 /path/to/task1.sh
 /path/to/task2.sh  /path/to/task3.sh
