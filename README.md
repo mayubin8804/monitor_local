@@ -14,5 +14,7 @@ You can use monitor_local as below:
 The subcommands you can use are shown as below:
 ### *setdefault*
 You can use this subcommand to change the config of monitor_local. E.g.:
+
 `python bin/pymonitor_local.py setdefault -n 10`
+
 This means to set the monitor_local to checks the status of running tasks and executes new tasks every 10 minutes. You can use `python bin/pymonitor_local.py setdefault -h` to get more help information about this subcommand.
