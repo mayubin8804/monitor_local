@@ -21,7 +21,12 @@ In the tasks list file of this format, every line represent one task, all tasks 
 ```
 
 ### *Format 2*
-
+In the tasks list file of this format, you can put two tasks separated  by space or Tab in one line, the second task will be executed after the first task is finished. E.g.:
+```
+/path/to/task1.sh
+/path/to/task2.sh  /path/to/task3.sh
+/path/to/task2.sh  /path/to/task4.sh
+```
 
 ## How to use
 You can use monitor_local as below:
