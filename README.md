@@ -9,4 +9,7 @@ Monitor_Local use ZODB to store the information of tasks and use crontab to moni
 First, you must make sure that you have installed Python 2.7. And then you just need to download the software and uncompress it into a suitable path.
 
 ## How to use
-The only program you need to use in monitor_local is `bin/pymonitor_local.py`, there are several subcommands you can use in this program.
+You can use monitor_local as below:  
+`bin/pymonitor_local.py subcommand [options]`  
+The subcommands you can use are shown as below:
+### setdefault
