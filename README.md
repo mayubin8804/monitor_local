@@ -8,12 +8,28 @@ Monitor_Local use ZODB to store the information of tasks and use crontab of Linu
 ## Installation
 First, you must make sure that you have installed Python 2.7, and then you just need to download the software and uncompress it into a suitable path.
 
+## How to specify the order of tasks
+In monitor_local, a task means a shell scripts, you can specify the execution order of multiple tasks by tasks list file. There are 2 formats of the list file you can use.  
+**Note**: The path of the shell scripts must be absolute path.
+
+### *Format 1*
+In the tasks list file of this format, every line represent one task, all tasks in the file will be executed parallel. E.g.:  
+```
+/path/to/task1.sh
+/path/to/task2.sh
+/path/to/task3.sh
+```
+
+### *Format 2*
+
+
 ## How to use
 You can use monitor_local as below:
 
 `python bin/pymonitor_local.py subcommand [options]`
 
 The subcommands you can use are shown as below.
+
 ### *setdefault*
 You can use this subcommand to change the config of monitor_local. E.g.:
 
